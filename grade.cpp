@@ -1,63 +1,24 @@
-#include <iomanip>
-#include <ios>
-#include <iostream>
-#include <string>
+#include <stdexcept>
 #include <vector>
-#include <algorithm>
+#include "grade.h"
+#include "median.h"
+#include "Student_info.h"
 
-using namespace std;
+using std::domain_error ; using std::vector;
 
-int main()
+double grade(double midterm, double final, double homework)
 {
-  cout << "Enter your first name: " ;
-  string name;
-  cin >> name;
-  cout << "Nice to meet you, " << name << endl ;
+  return 0.2 * midterm + 0.4 * final + 0.4 * homework;
+}
 
-  cout << "Enter your midterm and final exam grades: ";
-  double mid,fin;
-  cin >> mid >> fin;
+double grade(double midterm, double final, const vector<double>& hw)
+{
+  if (hw.size()==0)
+    throw domain_error("student has done no homework");
+  return grade(midterm,final,median(hw));
+}
 
-  cout << "Enter your homework grades, "
-    "followed by endoffile: ";
-
-  int cnt=0;
-  double sum=0;
-
-  double x;
-  vector<double> homework ;
-   
-  //invariant : homework contain all homework contain which read until now
- 
-  while(cin>>x) {
-    homework.push_back(x);
-  }
-
-  typedef vector<double>::size_type vec_sz;
-  vec_sz size = homework.size();
-
-  if(size==0)
-    {
-      cout << "You must enter your grade. "
-	"Please try again." << endl;
-
-      return 1;
-    }
-  
-  sort(homework.begin(), homework.end());
-
-  vec_sz pmid = size/2;
-  double median;
-  median = size % 2 ==0 ? (homework[pmid-1] + homework[pmid])/2
-    : homework[pmid] ;
-
-  
-  streamsize prec = cout.precision();
-  cout << "Your final grad is " << setprecision(3)
-       << 0.2 * mid + 0.4 * fin + 0.4 * median
-       << setprecision(prec) << endl;
-
-  cout << "Prec is " << prec << endl;
-
-  return 0;
+double grade(const Student_info& s)
+{
+  return grade(s.midterm, s.final, s.homework);
 }

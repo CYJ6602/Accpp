@@ -47,31 +47,58 @@ istream& read_hw(istream& in, vector<double>& hw)
   return in;
 }
 
+struct Student_info {
+  string name;
+  double midterm, final;
+  vector<double> homework;
+};
+
+istream& read(istream& is, Student_info& s)
+{
+
+  is >> s.name >> s.midterm >> s.final;
+  read_hw(is, s.homework);
+  return is;
+}
+
+
+double grade(const Struct_info& s)
+{
+  return grade(s.midterm, s.final, s.homework);
+}
+
+bool compare(const Student_info& x, const Student_info& y)
+{
+  return x.name < y.name ;
+}
 
 int main()
 {
-  cout << "Enter your first name: " ;
-  string name;
-  cin >> name;
-  cout << "Nice to meet you, " << name << endl ;
+  vector<Student_info> students;
+  Student_info record;
+  string::size_type maxlen =0;
 
-  cout << "Enter your midterm and final exam grades: ";
-  double midterm, final;
-  cin >> midterm >> final;
-
-  cout << "Enter your homework grades, "
-    "followed by endoffile: ";
-
-  double x;
-  vector<double> homework ;
-   
-  //invariant : homework contain all homework contain which read until now
- 
-  while(cin>>x) {
-    homework.push_back(x);
+  while(read(cin, record)) {
+    maxlen = max(maxlen, record.name.size);
+    students.push_back(record);
   }
 
-  cout << "Your final grade is " << grade(midterm,final,homework) << endl;
+  sort(students.begin(),students.end(),compare);
 
+  for(vector<Student_info>::size_type i=0; i != students.size() ; ++i) {
+
+    cout << students[i].name
+	 << string(maxlen + 1 - students[i].name.size(), ' ');
+    
+    try {
+      double final_grade = grade(students[i]);
+      streamsize prec = cout.precision();
+      cout << setprecision(3) << final_grade << setprecision(prec) ;
+    } catch(domain_error e) {
+      cout << e.what();
+    }
+    cout << endl;
+
+  }
   return 0;
 }
