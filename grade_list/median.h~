@@ -1,0 +1,8 @@
+#ifndef median_h
+#define median_h
+
+#include <list>
+
+double median(std::list<double>);
+
+#endif

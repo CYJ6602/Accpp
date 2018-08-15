@@ -24,7 +24,7 @@ int main()
 
   sort(students.begin(), students.end(), compare);
 
-  for(vector<Students_info>::size_type i=0 ; i != students.size() ; ++i)
+  for(vector<Student_info>::size_type i=0 ; i != students.size() ; ++i)
     {
       cout << students[i].name
 	   << string(maxlen + 1 - students[i].name.size(),' ');

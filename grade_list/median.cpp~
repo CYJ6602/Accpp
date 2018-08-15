@@ -1,0 +1,22 @@
+#include "median.h"
+#include <list>
+#include <stdexcept>
+#include <algorithm>
+
+using namespace std;
+
+
+double median(list<double> lst)
+{
+  typedef list<double>::size_type lst_size;
+  lst_size size = lst.size();
+  if(size==0)
+    throw domain_error("median of empty list");
+
+  sort(list.begin(), list.end());
+  lst_size mid = size/2;
+
+  list<double>::iterator iter = lst.begin();
+  
+  return size % 2 == 0 ? (*(iter+mid-1)+*(iter+mid))/2 : *(iter+mid) ; 
+}
