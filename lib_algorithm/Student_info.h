@@ -1,5 +1,5 @@
-#ifndef Guard_Student_info_h
-#define Guard_Student_info_h
+#ifndef GUARD_Student_info
+#define GUARD_Student_info
 
 #include <iostream>
 #include <string>

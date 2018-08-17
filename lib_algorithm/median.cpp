@@ -1,6 +1,7 @@
 #include "median.h"
 #include <vector>
 #include <stdexcept>
+#include <algorithm>
 
 using namespace std;
 

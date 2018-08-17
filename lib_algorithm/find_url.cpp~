@@ -1,0 +1,28 @@
+#include <iostream>
+#include <cctype>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+vector<string> find_urls(const string& s)
+{
+  vector<string> ret;
+  typedef string::const_iterator iter;
+  iter b = s.begin(), e = s.end();
+
+  while(b != e)
+    {
+      b = url_beg(b,e);
+
+      if(b != e)
+	{
+	  iter after = url_end(b,e);
+	  ret.push_back(string(b,after));
+
+	  b = after;
+	}
+    }
+  return ret;
+}
