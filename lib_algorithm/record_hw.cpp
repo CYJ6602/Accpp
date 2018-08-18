@@ -74,14 +74,46 @@ double optimistic_median_analysis(const vector<Student_info>& students)
   return median(grades);
 }
 
+bool fgrade(const Student_info& s)
+{
+  return grade(s) < 60 ;
+}
+
+bool pgrade(const Student_info& s)
+{
+  return !fgrade(s);
+}
+
+vector<Student_info> two_pass_extract_fail(vector<Student_info>& students)
+{
+  vector<Student_info> fail;
+  remove_copy_if(students.begin(), students.end(), back_inserter(fail), pgrade);
+  students.erase(remove_if(students.begin(), students.end(), fgrade), students.end());
+
+  return fail;
+}
+  
+vector<Student_info> one_pass_extract_fail(vector<Student_info>& students)
+{
+  vector<Student_info>::iterator iter;
+  iter = stable_partition(students.begin(),students.end(),pgrade);
+  vector<Student_info> fail(iter, students.end());
+  students.erase(iter,students.end());
+
+  return fail;
+}
+
+
 int main()
 {
   
-  vector<Student_info> did, didnt;
+  vector<Student_info> did, didnt, all;
   Student_info student;
   
   while(read(cin,student))
     {
+      all.push_back(student);
+      
       if(did_all_hw(student))
 	did.push_back(student);
       else
@@ -104,6 +136,13 @@ int main()
   write_analysis(cout,"average", average_analysis, did, didnt);
   write_analysis(cout,"median of hw turned in", optimistic_median_analysis, did, didnt);
 
+  vector<Student_info> fail = one_pass_extract_fail(all);
+  for(vector<Student_info>::const_iterator iter = all.begin(); iter != all.end(); iter++)
+    cout << iter->name << " : pass" << endl;
+
+  for(vector<Student_info>::const_iterator iter = fail.begin(); iter != fail.end(); iter++)
+    cout << iter->name << " : fail" << endl;
+  
   return 0;
    
 }
